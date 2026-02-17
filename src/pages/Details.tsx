@@ -44,6 +44,9 @@ export default function Details() {
                         <span className="block text-2xl font-mono font-bold text-green-600">{koala.age}</span>
                         <span className="text-xs text-gray-400">{koala.birthday} 生まれ</span>
                         {!koala.isAlive && <span className="block text-xs text-red-400 mt-1">🌈 {koala.death}</span>}
+                        <Link href={`/tree/${koala.id}`} className="inline-block mt-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold hover:bg-green-200">
+                            家系図を見る
+                        </Link>
                     </div>
                 </div>
 

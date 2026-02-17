@@ -3,6 +3,7 @@ import { KoalaProvider } from './context/KoalaContext';
 import Home from './pages/Home';
 import Details from './pages/Details';
 import KinshipCalculator from './pages/Kinship';
+import FamilyTree from './pages/FamilyTree';
 import { Calculator, Home as HomeIcon } from 'lucide-react';
 
 const NotFound = () => <div className="p-4 text-center mt-10">404 Not Found</div>;
@@ -32,6 +33,7 @@ function App() {
           <Switch>
             <Route path="/" component={Home} />
             <Route path="/koala/:id" component={Details} />
+            <Route path="/tree/:id" component={FamilyTree} />
             <Route path="/calculator" component={KinshipCalculator} />
             <Route component={NotFound} />
           </Switch>
