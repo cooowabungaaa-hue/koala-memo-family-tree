@@ -29,7 +29,7 @@ const FamilyTreeNode = ({ data }: NodeProps<FamilyTreeNodeType>) => {
 
             <div className="flex items-center gap-3">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0 shadow-inner text-white ${isMale ? 'bg-koala-base' : 'bg-pink-400'}`}>
-                    {isMale ? '♂' : '♀'}
+                    🐨
                 </div>
                 <div className="min-w-0">
                     <div className="text-[10px] text-gray-400 font-medium mb-0.5 tracking-wider truncate uppercase">{data.details.id}</div>

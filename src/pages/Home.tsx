@@ -110,8 +110,8 @@ export default function Home() {
                         {/* Info Card */}
                         <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-gray-100 flex items-center gap-5 relative overflow-hidden">
                             <div className="absolute -right-4 -top-4 w-20 h-20 bg-koala-light rounded-full opacity-50"></div>
-                            <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold flex-shrink-0 shadow-inner text-white ${selectedKoala.gender === 'オス' ? 'bg-koala-base' : 'bg-pink-400'}`}>
-                                {selectedKoala.gender === 'オス' ? '♂' : '♀'}
+                            <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl font-bold flex-shrink-0 shadow-inner text-white ${selectedKoala.gender === 'オス' ? 'bg-koala-base' : 'bg-pink-400'}`}>
+                                🐨
                             </div>
                             <div className="z-10">
                                 <h2 className="text-2xl font-bold text-gray-800">
