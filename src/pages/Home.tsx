@@ -68,9 +68,10 @@ export default function Home() {
                     {search && (
                         <button
                             onClick={() => { setSearch(''); setSelectedKoala(null); }}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-zinc-700 transition-all flex items-center justify-center"
+                            title="クリア"
                         >
-                            <X className="w-5 h-5" />
+                            <X className="w-4 h-4" />
                         </button>
                     )}
                 </div>
