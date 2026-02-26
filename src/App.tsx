@@ -3,26 +3,37 @@ import { KoalaProvider } from './context/KoalaContext';
 import Home from './pages/Home';
 import KinshipCalculator from './pages/Kinship';
 
-const NotFound = () => <div className="p-4 text-center mt-10 text-gray-400">404 Not Found</div>;
+const NotFound = () => <div className="p-10 text-center text-gray-400 font-medium">404 Not Found</div>;
 
 function Navigation() {
   const [location] = useLocation();
 
   return (
-    <nav className="pt-6 px-5 relative z-50">
-      <div className="flex bg-white/70 backdrop-blur-md p-1 rounded-2xl shadow-sm border border-gray-100">
+    <nav className="mb-5 shrink-0 px-5">
+      <div className="bg-gray-200/60 p-1 rounded-xl flex items-center shadow-inner relative border border-white/20">
         <Link href="/">
-          <a className={`flex-1 text-center py-2.5 rounded-xl text-sm font-bold transition-all ${location === '/' ? 'bg-koala-base text-white shadow-md' : 'text-gray-400 hover:text-gray-600'}`}>
-            家系図
+          <a className={`w-1/2 py-2.5 text-sm font-bold rounded-lg transition-all text-center flex items-center justify-center gap-1.5 ${location === '/' ? 'bg-white text-koala-dark shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}>
+            🌿 ファミリーツリー
           </a>
         </Link>
         <Link href="/calculator">
-          <a className={`flex-1 text-center py-2.5 rounded-xl text-sm font-bold transition-all ${location === '/calculator' ? 'bg-koala-base text-white shadow-md' : 'text-gray-400 hover:text-gray-600'}`}>
-            親戚度
+          <a className={`w-1/2 py-2.5 text-sm font-bold rounded-lg transition-all text-center flex items-center justify-center gap-1.5 ${location === '/calculator' ? 'bg-white text-koala-dark shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}>
+            🔍 つながりチェック
           </a>
         </Link>
       </div>
     </nav>
+  );
+}
+
+function Header() {
+  return (
+    <header className="pt-10 pb-4 px-6 text-center shrink-0">
+      <h1 className="text-2xl font-bold text-koala-dark flex justify-center items-center gap-2">
+        <span className="text-3xl">🐨</span> Koala Family Tree
+      </h1>
+      <p className="text-xs text-gray-500 mt-2 font-medium">国内コアラのいのちの繋がり</p>
+    </header>
   );
 }
 
@@ -31,9 +42,10 @@ function App() {
     <KoalaProvider>
       <Router base="/koala-memo-family-tree">
         <div className="min-h-screen bg-koala-light text-koala-text font-sans selection:bg-koala-base/30">
-          <div className="max-w-md mx-auto min-h-screen relative shadow-sm flex flex-col">
+          <div className="max-w-md mx-auto min-h-screen relative shadow-sm flex flex-col bg-koala-light">
+            <Header />
             <Navigation />
-            <main className="flex-1">
+            <main className="flex-1 flex flex-col overflow-hidden">
               <Switch>
                 <Route path="/" component={Home} />
                 <Route path="/calculator" component={KinshipCalculator} />
