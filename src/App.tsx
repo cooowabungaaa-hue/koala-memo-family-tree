@@ -1,4 +1,4 @@
-import { Route, Switch } from 'wouter';
+import { Route, Switch, Router } from 'wouter';
 import { KoalaProvider } from './context/KoalaContext';
 import Home from './pages/Home';
 import Details from './pages/Details';
@@ -13,13 +13,15 @@ function App() {
       <div className="min-h-screen bg-koala-light text-koala-text font-sans selection:bg-koala-base/30">
         <div className="max-w-md mx-auto bg-koala-light min-h-screen relative shadow-sm">
           <main>
-            <Switch>
-              <Route path="/" component={Home} />
-              <Route path="/koala/:id" component={Details} />
-              <Route path="/tree/:id" component={FamilyTree} />
-              <Route path="/calculator" component={KinshipCalculator} />
-              <Route component={NotFound} />
-            </Switch>
+            <Router base="/koala-memo-family-tree">
+              <Switch>
+                <Route path="/" component={Home} />
+                <Route path="/koala/:id" component={Details} />
+                <Route path="/tree/:id" component={FamilyTree} />
+                <Route path="/calculator" component={KinshipCalculator} />
+                <Route component={NotFound} />
+              </Switch>
+            </Router>
           </main>
         </div>
       </div>
