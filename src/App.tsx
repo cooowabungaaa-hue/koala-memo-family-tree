@@ -12,12 +12,12 @@ function Navigation() {
     <nav className="mb-5 shrink-0 px-5">
       <div className="bg-gray-200/60 p-1 rounded-xl flex items-center shadow-inner relative border border-white/20">
         <Link href="/">
-          <a className={`w-1/2 py-2.5 text-sm font-bold rounded-lg transition-all text-center flex items-center justify-center gap-1.5 ${location === '/' ? 'bg-white text-koala-dark shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}>
+          <a className={`w-1/2 py-2.5 text-xs sm:text-sm font-bold rounded-lg transition-all text-center flex items-center justify-center gap-1 whitespace-nowrap ${location === '/' ? 'bg-white text-koala-dark shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}>
             🌿 ファミリーツリー
           </a>
         </Link>
         <Link href="/calculator">
-          <a className={`w-1/2 py-2.5 text-sm font-bold rounded-lg transition-all text-center flex items-center justify-center gap-1.5 ${location === '/calculator' ? 'bg-white text-koala-dark shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}>
+          <a className={`w-1/2 py-2.5 text-xs sm:text-sm font-bold rounded-lg transition-all text-center flex items-center justify-center gap-1 whitespace-nowrap ${location === '/calculator' ? 'bg-white text-koala-dark shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}>
             🔍 つながりチェック
           </a>
         </Link>
