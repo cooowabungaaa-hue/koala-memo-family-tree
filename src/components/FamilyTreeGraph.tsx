@@ -46,7 +46,7 @@ const FamilyTreeGraph = ({ centerId }: FamilyTreeGraphProps) => {
     }, [setLocation]);
 
     return (
-        <div style={{ height: 'calc(100vh - 200px)', minHeight: '500px' }} className="border rounded-xl overflow-hidden bg-gray-50 dark:bg-zinc-900">
+        <div style={{ height: '500px' }} className="w-full bg-gray-50/50 dark:bg-zinc-900 shadow-inner">
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
@@ -56,10 +56,10 @@ const FamilyTreeGraph = ({ centerId }: FamilyTreeGraphProps) => {
                 nodeTypes={nodeTypes}
                 onNodeClick={onNodeClick}
                 fitView
-                attributionPosition="bottom-right"
+                className="family-tree-flow"
             >
-                <Background />
-                <Controls />
+                <Background color="#87a96b" gap={20} size={1} />
+                <Controls showInteractive={false} className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 shadow-lg" />
             </ReactFlow>
         </div>
     );

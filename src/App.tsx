@@ -12,18 +12,18 @@ function App() {
   return (
     <KoalaProvider>
       <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 text-gray-900 dark:text-gray-100 font-sans pb-safe">
-        <header className="bg-white dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700 sticky top-0 z-50">
-          <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
+        <header className="bg-koala-green text-white p-4 shadow-md sticky top-0 z-50">
+          <div className="max-w-4xl mx-auto flex items-center justify-between">
             <Link href="/">
-              <h1 className="font-bold text-xl tracking-tight text-green-700 dark:text-green-500 cursor-pointer flex items-center gap-2">
-                🐨 KoalaDB
+              <h1 className="text-xl font-bold flex items-center gap-2 cursor-pointer">
+                <span>🐨</span> コアラ家系図サーチ
               </h1>
             </Link>
             <nav className="flex gap-4">
-              <Link href="/" className="text-gray-600 dark:text-gray-300 hover:text-green-600">
+              <Link href="/" className="hover:text-green-100 transition-colors">
                 <HomeIcon className="w-6 h-6" />
               </Link>
-              <Link href="/calculator" className="text-gray-600 dark:text-gray-300 hover:text-green-600">
+              <Link href="/calculator" className="hover:text-green-100 transition-colors">
                 <Calculator className="w-6 h-6" />
               </Link>
             </nav>

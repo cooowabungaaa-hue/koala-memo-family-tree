@@ -1,90 +1,139 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { useKoalas } from '../context/KoalaContext';
-import { KoalaCard } from '../components/KoalaCard';
-import { Search, Loader2 } from 'lucide-react';
+import FamilyTreeGraph from '../components/FamilyTreeGraph';
+import { Search, Loader2, X } from 'lucide-react';
+import type { Koala } from '../types';
 
 export default function Home() {
     const { koalas, loading } = useKoalas();
     const [search, setSearch] = useState('');
-    const [zooFilter, setZooFilter] = useState<string>('all');
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [selectedKoala, setSelectedKoala] = useState<Koala | null>(null);
+    const searchRef = useRef<HTMLDivElement>(null);
 
-    // Extract unique zoos
-    const zoos = useMemo(() => {
-        const list = Array.from(new Set(koalas.map(k => k.zoo).filter(Boolean)));
-        return list.sort();
-    }, [koalas]);
+    const suggestions = useMemo(() => {
+        if (!search) return [];
+        return koalas.filter(k =>
+            k.name.includes(search) ||
+            k.zoo.includes(search) ||
+            k.id.includes(search)
+        ).slice(0, 10);
+    }, [koalas, search]);
 
-    const filteredKoalas = useMemo(() => {
-        return koalas.filter(k => {
-            const matchSearch = k.name.includes(search) || k.zoo.includes(search);
-            const matchZoo = zooFilter === 'all' || k.zoo === zooFilter;
-            return matchSearch && matchZoo;
-        });
-    }, [koalas, search, zooFilter]);
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+                setShowSuggestions(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const handleSelect = (koala: Koala) => {
+        setSelectedKoala(koala);
+        setSearch(koala.name);
+        setShowSuggestions(false);
+    };
 
     if (loading) {
         return (
             <div className="flex justify-center items-center h-64">
-                <Loader2 className="w-8 h-8 animate-spin text-green-600" />
+                <Loader2 className="w-8 h-8 animate-spin text-koala-green" />
             </div>
         );
     }
 
     return (
-        <div className="p-4 max-w-4xl mx-auto space-y-6">
-            <div className="flex float-right text-xs text-gray-500">
-                登録数: {koalas.length}頭
-            </div>
-
-            {/* Search & Filter */}
-            <div className="sticky top-0 bg-gray-50 dark:bg-zinc-900 pt-2 pb-4 z-10 space-y-3">
+        <div className="p-4 max-w-2xl mx-auto space-y-6 min-h-[calc(100vh-4rem)]">
+            {/* Search Section */}
+            <div className="relative" ref={searchRef}>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    コアラの名前を入力
+                </label>
                 <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
                         type="text"
-                        placeholder="名前や動物園で検索..."
-                        className="w-full pl-9 pr-4 py-2 rounded-lg border bg-white dark:bg-zinc-800 dark:border-zinc-700 shadow-sm focus:ring-2 focus:ring-green-500 outline-none"
+                        placeholder="例: だいふく"
+                        className="w-full pl-10 pr-10 py-3 rounded-lg border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 shadow-sm p-3 border focus:ring-2 focus:ring-koala-green focus:border-koala-green outline-none transition-all"
                         value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        onChange={(e) => {
+                            setSearch(e.target.value);
+                            setShowSuggestions(true);
+                            if (!e.target.value) setSelectedKoala(null);
+                        }}
+                        onFocus={() => setShowSuggestions(true)}
                     />
-                </div>
-
-                <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
-                    <button
-                        onClick={() => setZooFilter('all')}
-                        className={`px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-colors border ${zooFilter === 'all'
-                                ? 'bg-green-600 text-white border-green-600'
-                                : 'bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-zinc-700'
-                            }`}
-                    >
-                        全て
-                    </button>
-
-                    {zoos.map(zoo => (
+                    {search && (
                         <button
-                            key={zoo}
-                            onClick={() => setZooFilter(zoo)}
-                            className={`px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-colors border ${zooFilter === zoo
-                                    ? 'bg-green-600 text-white border-green-600'
-                                    : 'bg-white dark:bg-zinc-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-zinc-700'
-                                }`}
+                            onClick={() => { setSearch(''); setSelectedKoala(null); }}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                         >
-                            {zoo}
+                            <X className="w-5 h-5" />
                         </button>
-                    ))}
+                    )}
                 </div>
+
+                {/* Suggestions Dropdown */}
+                {showSuggestions && suggestions.length > 0 && (
+                    <div className="absolute z-50 w-full mt-1 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                        {suggestions.map(k => (
+                            <div
+                                key={k.id}
+                                className="p-3 hover:bg-gray-50 dark:hover:bg-zinc-700 cursor-pointer border-b last:border-b-0 border-gray-100 dark:border-zinc-700 flex justify-between items-center"
+                                onClick={() => handleSelect(k)}
+                            >
+                                <div>
+                                    <span className="font-bold text-gray-800 dark:text-gray-200">{k.name}</span>
+                                    <span className="ml-2 text-xs text-gray-500">{k.id}</span>
+                                </div>
+                                <span className="text-xs text-gray-400">{k.zoo}</span>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
-            {/* Grid */}
-            {filteredKoalas.length === 0 ? (
-                <div className="text-center py-10 text-gray-500">
-                    見つかりませんでした 🐨
+            {/* Selected Koala Detail & Tree */}
+            {selectedKoala && (
+                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div className="bg-white dark:bg-zinc-800 p-6 rounded-xl shadow-sm border-l-4 border-koala-green">
+                        <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+                            {selectedKoala.name}
+                        </h2>
+                        <div className="mt-2 flex flex-wrap gap-2 text-gray-600 dark:text-gray-300">
+                            <span className={`px-2 py-0.5 rounded text-sm ${selectedKoala.gender === 'オス' ? 'bg-blue-50 text-blue-600' : 'bg-pink-50 text-pink-600'}`}>
+                                {selectedKoala.gender}
+                            </span>
+                            <span className="bg-gray-100 dark:bg-zinc-700 px-2 py-0.5 rounded text-sm">
+                                所属: {selectedKoala.zoo}動物園
+                            </span>
+                            {!selectedKoala.isAlive && (
+                                <span className="bg-red-50 text-red-600 px-2 py-0.5 rounded text-sm">
+                                    🌈 {selectedKoala.death}
+                                </span>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                            家系図（3代）
+                        </h3>
+                        <div className="bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl overflow-hidden shadow-sm shadow-koala-green/10">
+                            <FamilyTreeGraph centerId={selectedKoala.id} />
+                        </div>
+                    </div>
                 </div>
-            ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {filteredKoalas.map(k => (
-                        <KoalaCard key={k.id} koala={k} />
-                    ))}
+            )}
+
+            {!selectedKoala && !search && (
+                <div className="py-12 text-center space-y-4">
+                    <div className="text-6xl">🐨</div>
+                    <div className="text-gray-500">
+                        コアラの名前を入力して家系図を検索しましょう
+                    </div>
                 </div>
             )}
         </div>
