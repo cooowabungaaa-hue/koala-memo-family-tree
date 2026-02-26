@@ -1,45 +1,22 @@
-import { useState, useMemo, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { useKoalas } from '../context/KoalaContext';
 import FamilyTreeGraph from '../components/FamilyTreeGraph';
-import { Search, Loader2, X, Archive } from 'lucide-react';
+import { Loader2, Archive } from 'lucide-react';
+import KoalaSearchInput from '../components/KoalaSearchInput';
 import type { Koala } from '../types';
 
 export default function Home() {
-    const { koalas, loading } = useKoalas();
-    const [search, setSearch] = useState('');
-    const [showSuggestions, setShowSuggestions] = useState(false);
+    const { loading } = useKoalas();
     const [selectedKoala, setSelectedKoala] = useState<Koala | null>(null);
-    const searchRef = useRef<HTMLDivElement>(null);
-
-    const suggestions = useMemo(() => {
-        if (!search) return [];
-        return koalas.filter(k =>
-            k.name.includes(search) ||
-            k.zoo.includes(search) ||
-            k.id.includes(search)
-        ).slice(0, 10);
-    }, [koalas, search]);
-
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-                setShowSuggestions(false);
-            }
-        }
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
 
     const handleSelect = (koala: Koala) => {
         setSelectedKoala(koala);
-        setSearch(koala.name);
-        setShowSuggestions(false);
     };
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen">
-                <Loader2 className="w-8 h-8 animate-spin text-koala-base" />
+            <div className="h-screen flex items-center justify-center bg-koala-light">
+                <Loader2 className="w-8 h-8 text-koala-base animate-spin" />
             </div>
         );
     }
@@ -55,49 +32,8 @@ export default function Home() {
             </header>
 
             <div className="px-5 space-y-8">
-                {/* Search Bar */}
-                <div className="relative z-20" ref={searchRef}>
-                    <div className="flex items-center bg-white rounded-full shadow-md px-4 py-3 border border-gray-100 focus-within:ring-2 focus-within:ring-koala-base transition-all">
-                        <Search className="w-5 h-5 text-gray-400" />
-                        <input
-                            type="text"
-                            id="searchInput"
-                            placeholder="コアラの名前を入力..."
-                            className="w-full bg-transparent border-none outline-none ml-3 text-gray-700 placeholder-gray-400 text-lg"
-                            value={search}
-                            onChange={(e) => {
-                                setSearch(e.target.value);
-                                setShowSuggestions(true);
-                                if (!e.target.value) setSelectedKoala(null);
-                            }}
-                            onFocus={() => setShowSuggestions(true)}
-                        />
-                        {search && (
-                            <button
-                                onClick={() => { setSearch(''); setSelectedKoala(null); }}
-                                className="p-1 rounded-full text-gray-300 hover:text-gray-500 transition-colors"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
-                        )}
-                    </div>
-
-                    {/* Suggestions Dropdown */}
-                    {showSuggestions && suggestions.length > 0 && (
-                        <div className="absolute top-16 left-0 w-full bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden z-30">
-                            {suggestions.map((k, index) => (
-                                <div
-                                    key={k.id}
-                                    className={`px-4 py-3 hover:bg-koala-light cursor-pointer transition-colors text-gray-700 ${index !== suggestions.length - 1 ? 'border-b border-gray-50' : ''} flex justify-between items-center`}
-                                    onClick={() => handleSelect(k)}
-                                >
-                                    <span className="font-medium">{k.name}</span>
-                                    <span className="text-xs text-gray-400">{k.zoo}</span>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
+                {/* Search Section */}
+                <KoalaSearchInput onSelect={handleSelect} placeholder="コアラの名前や施設名で検索..." />
 
                 {/* Main Content Area */}
                 {!selectedKoala ? (

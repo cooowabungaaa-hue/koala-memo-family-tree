@@ -107,9 +107,12 @@ function getPathToAncestor(start: string, target: string, map: Map<string, Koala
 }
 
 function getRelationshipName(coeff: number): string {
-    if (coeff >= 0.5) return '親子 / きょうだい (0.5)';
-    if (coeff >= 0.25) return 'おじ・おば / 祖父母 / 半きょうだい (0.25)';
-    if (coeff >= 0.125) return 'いとこ (0.125)';
+    if (coeff >= 1.0) return '自分';
+    if (coeff >= 0.5) return '親子 / 全きょうだい';
+    if (coeff >= 0.25) return 'おじ・おば / 祖父母 / 半きょうだい';
+    if (coeff >= 0.125) return 'いとこ / 曾祖父母';
+    if (coeff >= 0.0625) return 'いとこ違い / 高祖父母';
+    if (coeff >= 0.03125) return 'はとこ';
     if (coeff > 0) return '遠縁';
     return '血縁なし';
 }
