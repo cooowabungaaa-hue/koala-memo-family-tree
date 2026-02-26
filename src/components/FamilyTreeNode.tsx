@@ -36,6 +36,7 @@ const FamilyTreeNode = ({ data }: NodeProps<FamilyTreeNodeType>) => {
                     <div className="font-bold text-sm text-koala-text leading-tight truncate">
                         {data.details.name}
                     </div>
+                    <div className="text-[9px] text-gray-400 mt-0.5">🎂 {data.details.birthday || '不明'}</div>
                 </div>
             </div>
 

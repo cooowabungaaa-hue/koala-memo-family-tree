@@ -117,6 +117,7 @@ export default function Home() {
                                 <h2 className="text-2xl font-bold text-gray-800">
                                     {selectedKoala.name}
                                 </h2>
+                                <p className="text-[10px] text-gray-400 font-medium mb-1">🎂 {selectedKoala.birthday || '不明'}</p>
                                 <div className="flex gap-2 mt-2">
                                     <span className="px-2 py-1 bg-gray-100 text-gray-600 text-[10px] rounded-md leading-none flex items-center">
                                         {selectedKoala.zoo}動物公園
