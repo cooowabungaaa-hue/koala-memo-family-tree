@@ -10,15 +10,17 @@ function Navigation() {
 
   return (
     <nav className="mb-5 shrink-0 px-5">
-      <div className="bg-gray-200/60 p-1 rounded-xl flex items-center shadow-inner relative border border-white/20">
+      <div className="bg-gray-200/60 p-1 rounded-xl grid grid-cols-2 gap-1 shadow-inner relative border border-white/20">
         <Link href="/">
-          <a className={`w-1/2 py-2.5 text-xs sm:text-sm font-bold rounded-lg transition-all text-center flex items-center justify-center gap-1 whitespace-nowrap ${location === '/' ? 'bg-white text-koala-dark shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}>
-            🌿 ファミリーツリー
+          <a className={`flex items-center justify-center gap-1.5 py-2.5 text-[11px] sm:text-sm font-bold rounded-lg transition-all leading-none ${location === '/' ? 'bg-white text-koala-dark shadow-sm' : 'text-gray-400 hover:text-gray-500 hover:bg-gray-100/50'}`}>
+            <span className="text-base sm:text-lg">🌿</span>
+            <span>ファミリーツリー</span>
           </a>
         </Link>
         <Link href="/calculator">
-          <a className={`w-1/2 py-2.5 text-xs sm:text-sm font-bold rounded-lg transition-all text-center flex items-center justify-center gap-1 whitespace-nowrap ${location === '/calculator' ? 'bg-white text-koala-dark shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}>
-            🔍 つながりチェック
+          <a className={`flex items-center justify-center gap-1.5 py-2.5 text-[11px] sm:text-sm font-bold rounded-lg transition-all leading-none ${location === '/calculator' ? 'bg-white text-koala-dark shadow-sm' : 'text-gray-400 hover:text-gray-500 hover:bg-gray-100/50'}`}>
+            <span className="text-base sm:text-lg">🔍</span>
+            <span>つながりチェック</span>
           </a>
         </Link>
       </div>
