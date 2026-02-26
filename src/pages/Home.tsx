@@ -140,7 +140,7 @@ export default function Home() {
                                 Family Tree (3代)
                             </h3>
                             <div className="bg-gray-50 rounded-2xl border border-gray-50 overflow-hidden">
-                                <FamilyTreeGraph centerId={selectedKoala.id} />
+                                <FamilyTreeGraph centerId={selectedKoala.id} onSelect={handleSelect} />
                             </div>
                         </div>
                     </div>

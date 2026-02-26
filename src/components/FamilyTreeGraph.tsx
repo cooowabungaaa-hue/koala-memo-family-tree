@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { ReactFlow, Controls, Background, useNodesState, useEdgesState, addEdge, BackgroundVariant } from '@xyflow/react';
 import type { Edge, NodeTypes, Connection } from '@xyflow/react';
+import type { Koala } from '../types';
 import '@xyflow/react/dist/style.css';
 import { useKoalas } from '../context/KoalaContext';
 import { buildFamilyTreeData, getLayoutedElements } from '../lib/familyTree';
@@ -9,6 +10,7 @@ import type { FamilyTreeNodeType } from './FamilyTreeNode';
 
 interface FamilyTreeGraphProps {
     centerId: string;
+    onSelect?: (koala: Koala) => void;
 }
 
 const defaultEdgeOptions = {
@@ -17,7 +19,7 @@ const defaultEdgeOptions = {
     animated: true,
 };
 
-const FamilyTreeGraph = ({ centerId }: FamilyTreeGraphProps) => {
+const FamilyTreeGraph = ({ centerId, onSelect }: FamilyTreeGraphProps) => {
     const { koalaMap } = useKoalas();
     const [nodes, setNodes, onNodesChange] = useNodesState<FamilyTreeNodeType>([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
@@ -45,9 +47,11 @@ const FamilyTreeGraph = ({ centerId }: FamilyTreeGraphProps) => {
         [setEdges],
     );
 
-    const onNodeClick = useCallback(() => {
-        // Just center the node if needed or do nothing. For now, matching the one-page flow.
-    }, []);
+    const onNodeDoubleClick = useCallback((_event: React.MouseEvent, node: FamilyTreeNodeType) => {
+        if (onSelect) {
+            onSelect(node.data.details);
+        }
+    }, [onSelect]);
 
     return (
         <div style={{ height: '500px' }} className="w-full bg-[#fdfdfd] shadow-inner relative">
@@ -58,7 +62,7 @@ const FamilyTreeGraph = ({ centerId }: FamilyTreeGraphProps) => {
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
                 nodeTypes={nodeTypes}
-                onNodeClick={onNodeClick}
+                onNodeDoubleClick={onNodeDoubleClick}
                 defaultEdgeOptions={defaultEdgeOptions}
                 fitView
                 className="family-tree-flow"
