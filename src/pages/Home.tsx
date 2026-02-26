@@ -49,9 +49,9 @@ export default function Home() {
             {/* Header */}
             <header className="pt-10 pb-6 px-6 text-center">
                 <h1 className="text-2xl font-bold text-koala-dark flex justify-center items-center gap-2">
-                    <span className="text-3xl">🐨</span> コアラ家系図サーチ
+                    <span className="text-3xl">🐨</span> Koala Family Tree
                 </h1>
-                <p className="text-xs text-gray-500 mt-2">国内のコアラの繋がりを探してみよう</p>
+                <p className="text-xs text-gray-500 mt-2">国内コアラのいのちの繋がり</p>
             </header>
 
             <div className="px-5 space-y-8">
