@@ -1,22 +1,26 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import { ReactFlow, Controls, Background, useNodesState, useEdgesState, addEdge } from '@xyflow/react';
+import { ReactFlow, Controls, Background, useNodesState, useEdgesState, addEdge, BackgroundVariant } from '@xyflow/react';
 import type { Edge, NodeTypes, Connection } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useKoalas } from '../context/KoalaContext';
 import { buildFamilyTreeData, getLayoutedElements } from '../lib/familyTree';
 import FamilyTreeNode from './FamilyTreeNode';
 import type { FamilyTreeNodeType } from './FamilyTreeNode';
-import { useLocation } from 'wouter';
 
 interface FamilyTreeGraphProps {
     centerId: string;
 }
 
+const defaultEdgeOptions = {
+    style: { stroke: '#7D9D78', strokeWidth: 2 },
+    type: 'smoothstep',
+    animated: true,
+};
+
 const FamilyTreeGraph = ({ centerId }: FamilyTreeGraphProps) => {
     const { koalaMap } = useKoalas();
     const [nodes, setNodes, onNodesChange] = useNodesState<FamilyTreeNodeType>([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
-    const [, setLocation] = useLocation();
 
     const nodeTypes = useMemo<NodeTypes>(() => ({ koalaNode: FamilyTreeNode }), []);
 
@@ -41,12 +45,12 @@ const FamilyTreeGraph = ({ centerId }: FamilyTreeGraphProps) => {
         [setEdges],
     );
 
-    const onNodeClick = useCallback((_event: React.MouseEvent, node: FamilyTreeNodeType) => {
-        setLocation(`/tree/${node.id}`);
-    }, [setLocation]);
+    const onNodeClick = useCallback(() => {
+        // Just center the node if needed or do nothing. For now, matching the one-page flow.
+    }, []);
 
     return (
-        <div style={{ height: '500px' }} className="w-full bg-gray-50/50 dark:bg-zinc-900 shadow-inner">
+        <div style={{ height: '500px' }} className="w-full bg-[#fdfdfd] shadow-inner relative">
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
@@ -55,11 +59,13 @@ const FamilyTreeGraph = ({ centerId }: FamilyTreeGraphProps) => {
                 onConnect={onConnect}
                 nodeTypes={nodeTypes}
                 onNodeClick={onNodeClick}
+                defaultEdgeOptions={defaultEdgeOptions}
                 fitView
                 className="family-tree-flow"
+                proOptions={{ hideAttribution: true }}
             >
-                <Background color="#87a96b" gap={20} size={1} />
-                <Controls showInteractive={false} className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 shadow-lg" />
+                <Background color="#7D9D78" gap={24} size={1} variant={BackgroundVariant.Dots} />
+                <Controls showInteractive={false} className="bg-white/80 backdrop-blur-sm !border-none !shadow-xl !rounded-full overflow-hidden mb-2 ml-2" />
             </ReactFlow>
         </div>
     );

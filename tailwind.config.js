@@ -8,7 +8,10 @@ export default {
         extend: {
             colors: {
                 koala: {
-                    green: '#87a96b',
+                    light: '#F3F6F3',
+                    base: '#7D9D78',
+                    dark: '#5C7A58',
+                    text: '#4A4A4A',
                 },
             },
         },
